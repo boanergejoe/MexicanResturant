@@ -1,0 +1,150 @@
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    int totalOrders = ViewBag.TotalOrders ?? 0;
+    decimal totalRevenue = ViewBag.TotalRevenue ?? 0;
+    int totalCustomers = ViewBag.TotalCustomers ?? 0;
+    int pendingOrders = ViewBag.PendingOrders ?? 0;
+}
+
+<div class="admin-dashboard">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-pepper-hot"></i>
+            <span>Mexican Admin</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="@Url.Action("Index", "Admin")" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="@Url.Action("Orders", "Admin")"><i class="fas fa-box"></i> Orders</a>
+            <a href="@Url.Action("MenuItems", "Admin")"><i class="fas fa-utensils"></i> Menu Items</a>
+            <a href="@Url.Action("Users", "Admin")"><i class="fas fa-users"></i> Users</a>
+            <a href="@Url.Action("Reports", "Admin")"><i class="fas fa-chart-bar"></i> Reports</a>
+            <a href="@Url.Action("Settings", "Admin")"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;"><i
+                class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <div class="admin-header">
+                <div>
+                    <h1>Dashboard</h1>
+                    <p class="admin-subtitle">Monitor orders, revenue, and customer activity with a modern admin experience.
+                    </p>
+                </div>
+                <div class="admin-action-buttons">
+                    <a href="@Url.Action("Orders", "Admin")" class="btn btn-outline-secondary">View Orders</a>
+                    <a href="@Url.Action("MenuItems", "Admin")" class="btn btn-danger">Manage Menu</a>
+                </div>
+            </div>
+
+            <div class="dashboard-summary-cards">
+                <div class="dashboard-card dashboard-card--accent-red">
+                    <div class="dashboard-card-top">
+                        <span class="dashboard-card-icon"><i class="fas fa-box"></i></span>
+                        <span class="dashboard-card-label">Total Orders</span>
+                    </div>
+                    <div class="dashboard-card-value">@totalOrders</div>
+                    <p class="dashboard-card-note">Processed orders across the platform</p>
+                </div>
+                <div class="dashboard-card dashboard-card--accent-orange">
+                    <div class="dashboard-card-top">
+                        <span class="dashboard-card-icon"><i class="fas fa-dollar-sign"></i></span>
+                        <span class="dashboard-card-label">Total Revenue</span>
+                    </div>
+                    <div class="dashboard-card-value">$@totalRevenue.ToString("F2")</div>
+                    <p class="dashboard-card-note">Revenue captured from completed orders</p>
+                </div>
+                <div class="dashboard-card dashboard-card--accent-green">
+                    <div class="dashboard-card-top">
+                        <span class="dashboard-card-icon"><i class="fas fa-users"></i></span>
+                        <span class="dashboard-card-label">Total Customers</span>
+                    </div>
+                    <div class="dashboard-card-value">@totalCustomers</div>
+                    <p class="dashboard-card-note">Unique customers registered or ordering</p>
+                </div>
+                <div class="dashboard-card dashboard-card--accent-blue">
+                    <div class="dashboard-card-top">
+                        <span class="dashboard-card-icon"><i class="fas fa-clock"></i></span>
+                        <span class="dashboard-card-label">Pending Orders</span>
+                    </div>
+                    <div class="dashboard-card-value">@pendingOrders</div>
+                    <p class="dashboard-card-note">Orders waiting for fulfillment</p>
+                </div>
+            </div>
+
+            <div class="admin-grid">
+                <section class="table-container revenue-card">
+                    <div class="section-head">
+                        <h3>Revenue Overview</h3>
+                        <span class="badge bg-danger">Live data</span>
+                    </div>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Revenue trends will display here once configured.</p>
+                    </div>
+                </section>
+
+                <section class="table-container quick-stats-card">
+                    <h3>Quick Stats</h3>
+                    <div class="quick-stats-list">
+                        <div><strong>Orders Today:</strong> <span>--</span></div>
+                        <div><strong>Revenue Today:</strong> <span>$0.00</span></div>
+                        <div><strong>Average Order:</strong> <span>$@(totalOrders > 0 ? (totalRevenue /
+                                                                                                                                            totalOrders).ToString("F2") : "0.00")</span></div>
+                            <div><strong>Conversion Rate:</strong> <span>--</span></div>
+                        </div>
+                    </section>
+
+                    <div class="table-container recent-orders-card">
+                        <div class="section-head">
+                            <h3>Recent Orders</h3>
+                        </div>
+                        @if (Model != null && Model.Any())
+                        {
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Take(10))
+                                    {
+                                        <tr>
+                                            <td>#@order.Id</td>
+                                            <td>@order.UserId</td>
+                                            <td>@order.OrderDate.ToString("MM/dd/yyyy")</td>
+                                            <td>$@order.Total.ToString("F2")</td>
+                                            <td>
+                                                <span
+                                                    class="badge @(order.Status == "Completed" ? "bg-success" : order.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                                    @order.Status
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("OrderDetails", "Admin", new { id = order.Id })"
+                                                       class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">No orders found.</div>
+                        }
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display:none;"></form>

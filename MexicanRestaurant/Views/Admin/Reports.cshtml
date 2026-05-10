@@ -1,0 +1,108 @@
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="admin-dashboard">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-pepper-hot"></i>
+            <span>Mexican Admin</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="@Url.Action("Index", "Admin")"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="@Url.Action("Orders", "Admin")"><i class="fas fa-box"></i> Orders</a>
+            <a href="@Url.Action("MenuItems", "Admin")"><i class="fas fa-utensils"></i> Menu Items</a>
+            <a href="@Url.Action("Users", "Admin")"><i class="fas fa-users"></i> Users</a>
+            <a href="@Url.Action("Reports", "Admin")" class="active"><i class="fas fa-chart-bar"></i> Reports</a>
+            <a href="@Url.Action("Settings", "Admin")"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;"><i
+                class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <div class="admin-header">
+                <div>
+                    <h1>Reports</h1>
+                    <p class="admin-subtitle">Live sales and order analytics for your restaurant.</p>
+                </div>
+                <div class="admin-action-buttons">
+                    <button class="btn btn-success" onclick="location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                    <a href="@Url.Action("Index", "Admin")" class="btn btn-danger">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-card-icon text-success">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Total Orders</h3>
+                        <div class="value">@(ViewBag.TotalOrders ?? 0)</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon text-success">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Revenue</h3>
+                        <div class="value">$@(((decimal)(ViewBag.TotalRevenue ?? 0m)).ToString("F2"))</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon text-warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Pending Orders</h3>
+                        <div class="value">@(ViewBag.PendingOrders ?? 0)</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon text-info">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Avg Order Value</h3>
+                        <div class="value">$@(((decimal)(ViewBag.AverageOrderValue ?? 0m)).ToString("F2"))</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3>Top Sold Menu Items</h3>
+                @if (ViewBag.TopItems != null && ((IEnumerable<dynamic>)ViewBag.TopItems).Any())
+                {
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th>Menu Item</th>
+                                <th>Quantity Sold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in (IEnumerable<dynamic>)ViewBag.TopItems)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Quantity</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">No sales data is available yet.</p>
+                }
+            </div>
+        </main>
+
+        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display:none;"></form>
+    </div>

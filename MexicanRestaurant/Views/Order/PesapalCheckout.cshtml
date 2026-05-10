@@ -1,0 +1,74 @@
+@model Order
+@{
+    ViewData["Title"] = "Pesapal Payment";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-money-bill"></i> Pesapal Payment</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> You will be redirected to Pesapal to complete your payment
+                        securely.
+                    </div>
+
+                    <div class="order-summary mb-4">
+                        <h5>Order Summary</h5>
+                        <div class="summary-line">
+                            <span>Order ID:</span>
+                            <span class="font-weight-bold">#@Model.Id</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>Amount:</span>
+                            <span class="font-weight-bold">$@Model.Total.ToString("F2")</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>Status:</span>
+                            <span class="badge bg-warning">@Model.Status</span>
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3">Pay via Pesapal</h5>
+                    <iframe width="100%" height="400"
+                            src="https://store.pesapal.com/embed-code?pageUrl=https://store.pesapal.com/mrestaurant"
+                            frameborder="0" allowfullscreen
+                            style="border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></iframe>
+
+                    <div class="mt-4">
+                        <a href="@Url.Action("MyOrders", "Order")" class="btn btn-secondary w-100">
+                            <i class="fas fa-arrow-left"></i> Back to Orders
+                        </a>
+                    </div>
+
+                    <div class="alert alert-light mt-4">
+                        <small class="text-muted">
+                            <i class="fas fa-lock"></i> Your payment is secure and encrypted. Pesapal is a trusted
+                            payment processor.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .summary-line {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .summary-line:last-child {
+        border-bottom: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+</style>

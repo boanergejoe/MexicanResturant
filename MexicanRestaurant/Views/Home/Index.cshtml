@@ -1,0 +1,247 @@
+﻿@model IEnumerable<MexicanRestaurant.Models.MenuItem>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-badge">Authentic Mexican Flavor</span>
+        <h1 class="hero-title">Authentic Mexican Flavor</h1>
+        <p class="hero-subtitle">Delicious, Fresh Made with Love</p>
+        <a asp-controller="Menu" asp-action="Index" class="btn btn-danger btn-lg order-now-btn">Order Now</a>
+    </div>
+</section>
+
+<!-- Popular Dishes Section -->
+<section class="popular-dishes-section">
+    <div class="container">
+        <h2 class="section-title">Popular Dishes</h2>
+        <div class="row">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model.Take(4))
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="food-card">
+                            <div class="food-image">
+                                <img src="@item.ImageUrl" alt="@item.Name"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=@item.Category'; this.classList.add('broken');">
+                            </div>
+                            <div class="food-info">
+                                <h5 class="food-name">@item.Name</h5>
+                                <p class="food-description">@item.Description</p>
+                                <div class="food-price">$@item.Price.ToString("F2")</div>
+                                <button class="btn btn-success add-to-cart-btn" onclick="addToCart(@item.Id)">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-3 col-sm-6">
+                    <div class="food-card">
+                        <div class="food-image">
+                            <img src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400" alt="Tacos"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=Tacos'; this.classList.add('broken');">
+                        </div>
+                        <div class="food-info">
+                            <h5 class="food-name">Carne Asada Tacos</h5>
+                            <p class="food-description">Grilled steak with onions and cilantro</p>
+                            <div class="food-price">$12.99</div>
+                            <button class="btn btn-success add-to-cart-btn" onclick="addToCart(1)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="food-card">
+                        <div class="food-image">
+                            <img src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=400" alt="Burrito"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=Burrito'; this.classList.add('broken');">
+                        </div>
+                        <div class="food-info">
+                            <h5 class="food-name">Chicken Burrito</h5>
+                            <p class="food-description">Large burrito with chicken, rice, beans</p>
+                            <div class="food-price">$14.99</div>
+                            <button class="btn btn-success add-to-cart-btn" onclick="addToCart(2)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="food-card">
+                        <div class="food-image">
+                            <img src="https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=400" alt="Nachos"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=Nachos'; this.classList.add('broken');">
+                        </div>
+                        <div class="food-info">
+                            <h5 class="food-name">Supreme Nachos</h5>
+                            <p class="food-description">Loaded with all toppings</p>
+                            <div class="food-price">$13.99</div>
+                            <button class="btn btn-success add-to-cart-btn" onclick="addToCart(3)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="food-card">
+                        <div class="food-image">
+                            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400" alt="Margarita"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=Margarita'; this.classList.add('broken');">
+                        </div>
+                        <div class="food-info">
+                            <h5 class="food-name">Classic Margarita</h5>
+                            <p class="food-description">Fresh lime margarita</p>
+                            <div class="food-price">$8.99</div>
+                            <button class="btn btn-success add-to-cart-btn" onclick="addToCart(4)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about-section">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-6">
+                <div class="about-text">
+                    <span class="section-subtitle">Authentic Mexican Experience</span>
+                    <h2 class="section-title">We bring the spirit of Mexico to your table</h2>
+                    <p>At Mexican Restaurant, every meal is crafted using fresh ingredients, time-honored recipes, and
+                        bold flavors. Our kitchen blends traditional techniques with modern presentation for a dining
+                        experience that feels both familiar and exciting.</p>
+                        <p>Whether you visit us for lunch, dinner, or online delivery, we make sure every dish is served
+                            with care and passion.</p>
+                            <div class="about-highlights row gy-3">
+                                <div class="col-sm-6">
+                                    <div class="feature-card">
+                                        <i class="fas fa-leaf"></i>
+                                        <h5>Fresh Ingredients</h5>
+                                        <p>Farm-fresh produce and handpicked spices ensure authentic flavor in every bite.</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="feature-card">
+                                        <i class="fas fa-pepper-hot"></i>
+                                        <h5>Bold Flavors</h5>
+                                        <p>Traditional Mexican spices are balanced with vibrant sauces and salsas.</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="feature-card">
+                                        <i class="fas fa-users"></i>
+                                        <h5>Family Friendly</h5>
+                                        <p>Warm hospitality and tasty menus make us ideal for family meals and gatherings.</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="feature-card">
+                                        <i class="fas fa-truck-fast"></i>
+                                        <h5>Fast Delivery</h5>
+                                        <p>Order online and enjoy speedy delivery right to your door with Paystack-secured
+                                            checkout.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="about-image-wrapper">
+                                <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900" alt="About Us"
+                                     class="about-image" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-stats row mt-5">
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <h3>10K+</h3>
+                                <p>Happy guests served</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <h3>250+</h3>
+                                <p>Menu items curated daily</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <h3>5*</h3>
+                                <p>Customer satisfaction rating</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card">
+                                <h3>24/7</h3>
+                                <p>Online ordering available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="contact-section">
+                <div class="container">
+                    <h2 class="section-title text-center">Contact Us</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="contact-card">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <h5>Location</h5>
+                                <p>104 Mexican Street<br>Food City, FC 78</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-card">
+                                <i class="fas fa-phone"></i>
+                                <h5>Phone</h5>
+                                <p>(211) 923205359<br>(250) 795757432</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-card">
+                                <i class="fas fa-envelope"></i>
+                                <h5>Email</h5>
+                                <p>info@mexicanrestaurant.com<br>orders@mexicanrestaurant.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            @section Scripts {
+                <script>
+                    function addToCart(menuItemId) {
+                        $.post('/Cart/AddToCart', { menuItemId: menuItemId })
+                            .done(function (response) {
+                                if (response.success) {
+                                    $('#cartCount').text(response.cartCount);
+                                    alert('Item added to cart!');
+                                } else {
+                                    alert(response.message);
+                                    if (response.message.includes('login')) {
+                                        window.location.href = '/Account/Login';
+                                    }
+                                }
+                            })
+                            .fail(function () {
+                                alert('Error adding item to cart. Please try again.');
+                            });
+                    }
+                </script>
+            }

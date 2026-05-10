@@ -1,0 +1,160 @@
+@model IEnumerable<MenuItem>
+@{
+    ViewData["Title"] = "Menu Items Management";
+}
+
+<div class="admin-dashboard">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-pepper-hot"></i>
+            <span>Mexican Admin</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="@Url.Action("Index", "Admin")"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="@Url.Action("Orders", "Admin")"><i class="fas fa-box"></i> Orders</a>
+            <a href="@Url.Action("MenuItems", "Admin")" class="active"><i class="fas fa-utensils"></i> Menu Items</a>
+            <a href="@Url.Action("Users", "Admin")"><i class="fas fa-users"></i> Users</a>
+            <a href="@Url.Action("Reports", "Admin")"><i class="fas fa-chart-bar"></i> Reports</a>
+            <a href="@Url.Action("Settings", "Admin")"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;"><i
+                class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <div class="admin-header">
+                <div>
+                    <h1>Menu Items Management</h1>
+                    <p class="admin-subtitle">Add, edit, and manage your restaurant's menu items.</p>
+                </div>
+                <div class="admin-action-buttons">
+                    <a href="@Url.Action("Create", "Menu")" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Add New Item
+                    </a>
+                    <a href="@Url.Action("Index", "Admin")" class="btn btn-danger">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-container">
+                @if (Model != null && Model.Any())
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Available</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                        {
+                                            <img src="@item.ImageUrl" alt="@item.Name" class="rounded"
+                                                 style="width: 60px; height: 60px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                                 style="width: 60px; height: 60px;">
+                                                <i class="fas fa-utensils text-muted"></i>
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <strong>@item.Name</strong>
+                                    </td>
+                                    <td>
+                                        <div
+                                            style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                            @item.Description
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong class="text-success">$@item.Price.ToString("F2")</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">@item.Category</span>
+                                    </td>
+                                    <td>
+                                        @if (item.IsAvailable)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> Available
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times"></i> Unavailable
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="@Url.Action("Edit", "Menu", new { id = item.Id })"
+                                                   class="btn btn-sm btn-outline-primary" title="Edit Item">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-warning" title="Toggle Availability"
+                                                    onclick="toggleAvailability(@item.Id, @item.IsAvailable.ToString().ToLower())">
+                                                <i class="fas fa-toggle-@(item.IsAvailable ? "on" : "off")"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" title="Delete Item"
+                                                    onclick="deleteItem(@item.Id, '@item.Name')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-utensils fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Menu Items Found</h4>
+                        <p class="text-muted">Start building your menu by adding your first item.</p>
+                        <a href="@Url.Action("Create", "Menu")" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Add First Menu Item
+                        </a>
+                    </div>
+                }
+            </div>
+        </main>
+
+        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display:none;"></form>
+    </div>
+
+    @section Scripts {
+        <script>
+            function toggleAvailability(itemId, currentStatus) {
+                const newStatus = !currentStatus;
+                const action = newStatus ? 'make available' : 'make unavailable';
+
+                if (confirm(`Are you sure you want to ${action} this menu item?`)) {
+                    // Implement toggle availability functionality
+                    // This would typically involve an AJAX call to update the item
+                    alert('Toggle availability functionality not yet implemented');
+                }
+            }
+
+            function deleteItem(itemId, itemName) {
+                if (confirm(`Are you sure you want to delete "${itemName}"? This action cannot be undone.`)) {
+                    // Implement delete functionality
+                    alert('Delete functionality not yet implemented');
+                }
+            }
+        </script>
+    }

@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Registration Confirmation";
+}
+
+<div class="auth-container">
+    <div class="auth-card p-4 shadow-sm">
+        <h2>Registration Complete</h2>
+        <p>@TempData["ActivationMessage"]</p>
+        @if (TempData["ActivationLink"] != null)
+        {
+            <div class="alert alert-info">
+                <p>Please use the activation link below to activate your account:</p>
+                <a href="@TempData["ActivationLink"]">Activate your account</a>
+            </div>
+        }
+        <a asp-controller="Account" asp-action="Login" class="btn btn-success">Go to Login</a>
+    </div>
+</div>

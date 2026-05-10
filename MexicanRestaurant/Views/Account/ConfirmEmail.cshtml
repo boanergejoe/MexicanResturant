@@ -1,0 +1,11 @@
+@{
+    ViewData["Title"] = "Email Confirmation";
+}
+
+<div class="auth-container">
+    <div class="auth-card p-4 shadow-sm">
+        <h2>Account Activation</h2>
+        <p>@ViewBag.StatusMessage</p>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-success">Proceed to Login</a>
+    </div>
+</div>

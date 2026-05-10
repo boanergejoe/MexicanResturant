@@ -1,0 +1,82 @@
+@model MexicanRestaurant.Controllers.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- Auth Page with Background -->
+<div class="auth-container">
+    <div class="auth-wrapper">
+        <!-- Login Card -->
+        <div class="auth-card">
+            <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">Email Address</label>
+                    <input asp-for="Email" class="form-control" placeholder="user@example.com">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                
+                    <div class="form-group">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input asp-for="RememberMe" class="form-check-input">
+                                    <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                                </div>
+                            </div>
+                
+                            <button type="submit" class="btn btn-login">Login</button>
+                        </form>
+            
+                        <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                            Don't have an account? <a asp-controller="Account" asp-action="Register"
+                                                      style="color: var(--primary-green); font-weight: 600;">Create one</a>
+                        </div>
+                    </div>
+
+                    <!-- Register Card -->
+                    <div class="auth-card">
+                        <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+                        <form asp-action="Register" method="post">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="FullName" class="form-control" placeholder="John Doe">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="Email" class="form-control" placeholder="your@email.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="Password" class="form-control" placeholder="Create password">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" name="ConfirmPassword" class="form-control" placeholder="Confirm password">
+                                <button type="submit" class="btn btn-register">Register</button>
+                            </form>
+            
+                            <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                                Already have an account? <a asp-controller="Account" asp-action="Login"
+                                                            style="color: var(--primary-green); font-weight: 600;">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @section Scripts {
+                    @{
+                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                    }
+                }

@@ -1,0 +1,86 @@
+@model IEnumerable<MexicanRestaurant.Models.MenuItem>
+@{
+    ViewData["Title"] = "Menu";
+    var searchTerm = ViewBag.SearchTerm as string;
+}
+
+<!-- Menu Page -->
+<section class="menu-page">
+    <div class="container">
+        <h2 class="section-title">Our Menu</h2>
+
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            <div class="search-result-summary">
+                Showing search results for <strong>"@searchTerm"</strong>
+            </div>
+        }
+        
+        <!-- Category Filters -->
+        <div class="category-filters">
+            <a asp-controller="Menu" asp-action="Index" asp-route-category="All" asp-route-search="@searchTerm"
+               class="category-btn @(ViewBag.SelectedCategory == "All" || ViewBag.SelectedCategory == null ? "active" : "")">All</a>
+            <a asp-controller="Menu" asp-action="Index" asp-route-category="Tacos" asp-route-search="@searchTerm"
+               class="category-btn @(ViewBag.SelectedCategory == "Tacos" ? "active" : "")">Tacos</a>
+            <a asp-controller="Menu" asp-action="Index" asp-route-category="Burritos" asp-route-search="@searchTerm"
+               class="category-btn @(ViewBag.SelectedCategory == "Burritos" ? "active" : "")">Burritos</a>
+            <a asp-controller="Menu" asp-action="Index" asp-route-category="Nachos" asp-route-search="@searchTerm"
+               class="category-btn @(ViewBag.SelectedCategory == "Nachos" ? "active" : "")">Nachos</a>
+            <a asp-controller="Menu" asp-action="Index" asp-route-category="Drinks" asp-route-search="@searchTerm"
+               class="category-btn @(ViewBag.SelectedCategory == "Drinks" ? "active" : "")">Drinks</a>
+        </div>
+        
+        <!-- Menu Items Grid -->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3 col-sm-6">
+                    <div class="food-card">
+                        <div class="food-image">
+                            <img src="@item.ImageUrl" alt="@item.Name"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=@item.Category'; this.classList.add('broken');">
+                        </div>
+                        <div class="food-info">
+                            <h5 class="food-name">@item.Name</h5>
+                            <p class="food-description">@item.Description</p>
+                            <div class="food-price">$@item.Price.ToString("F2")</div>
+                            <button class="btn btn-success add-to-cart-btn" onclick="addToCart(@item.Id)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <h4>No menu items found</h4>
+                <p>Please check back later for our delicious offerings.</p>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function addToCart(menuItemId) {
+            $.post('/Cart/AddToCart', { menuItemId: menuItemId })
+                .done(function (response) {
+                    if (response.success) {
+                        $('#cartCount').text(response.cartCount);
+                        alert('Item added to cart!');
+                    } else {
+                        alert(response.message);
+                        if (response.message.includes('login')) {
+                            window.location.href = '/Account/Login';
+                        }
+                    }
+                })
+                .fail(function () {
+                    alert('Error adding item to cart. Please try again.');
+                });
+        }
+    </script>
+}

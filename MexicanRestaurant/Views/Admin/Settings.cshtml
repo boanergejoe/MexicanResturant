@@ -1,0 +1,98 @@
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="admin-dashboard">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-pepper-hot"></i>
+            <span>Mexican Admin</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="@Url.Action("Index", "Admin")"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="@Url.Action("Orders", "Admin")"><i class="fas fa-box"></i> Orders</a>
+            <a href="@Url.Action("MenuItems", "Admin")"><i class="fas fa-utensils"></i> Menu Items</a>
+            <a href="@Url.Action("Users", "Admin")"><i class="fas fa-users"></i> Users</a>
+            <a href="@Url.Action("Reports", "Admin")"><i class="fas fa-chart-bar"></i> Reports</a>
+            <a href="@Url.Action("Settings", "Admin")" class="active"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;"><i
+                class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <div class="admin-header">
+                <div>
+                    <h1>Settings</h1>
+                    <p class="admin-subtitle">Account and operational metrics for your restaurant admin team.</p>
+                </div>
+                <div class="admin-action-buttons">
+                    <button class="btn btn-success" onclick="location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <a href="@Url.Action("Index", "Admin")" class="btn btn-danger">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-card-icon text-primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Total Users</h3>
+                        <div class="value">@(ViewBag.TotalUsers ?? 0)</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon text-success">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Active Users</h3>
+                        <div class="value">@(ViewBag.ActiveUsers ?? 0)</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon text-warning">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Pending Activation</h3>
+                        <div class="value">@(ViewBag.PendingActivation ?? 0)</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-icon text-info">
+                        <i class="fas fa-hamburger"></i>
+                    </div>
+                    <div class="summary-card-content">
+                        <h3>Total Menu Items</h3>
+                        <div class="value">@(ViewBag.TotalMenuItems ?? 0)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3>Administration Summary</h3>
+                <div class="settings-summary mt-3">
+                    <div class="settings-card">
+                        <h4>Pending User Activation</h4>
+                        <p>Users who still need to confirm their email and activate their account.</p>
+                    </div>
+                    <div class="settings-card">
+                        <h4>Total Revenue</h4>
+                        <p><strong>$@((decimal)(ViewBag.TotalRevenue ?? 0m)).ToString("F2")</strong></p>
+                    </div>
+                    <div class="settings-card">
+                        <h4>Security</h4>
+                        <p>Ensure all users verify their email and admin accounts remain secured.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display:none;"></form>
+    </div>
